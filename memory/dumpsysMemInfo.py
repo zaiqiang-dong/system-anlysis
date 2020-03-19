@@ -11,7 +11,7 @@ import sys
 
 
 def getMemoryInfo(listProcess, listPss, litsTotal):
-    tamp = time.strftime("%d-%H:%M:%S", time.localtime())
+    tamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     res = subprocess.Popen('adb shell "dumpsys meminfo"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
     lines = res.stdout.readlines()
 
@@ -26,20 +26,20 @@ def getMemoryInfo(listProcess, listPss, litsTotal):
     for l in linesOfPssProcess:
         searchObj = re.search(r' (.*)K: (.*) *\(pid (.*)\)\n', l.decode('utf-8'), re.M|re.I)
         if searchObj:
-            lt = [searchObj.group(3).strip().split(' ')[0], searchObj.group(2).strip(), searchObj.group(1).strip()]
+            lt = [searchObj.group(3).strip().split(' ')[0], searchObj.group(2).strip(), int(searchObj.group(1).strip().replace(',',''))]
             if lt[1] != "dumpsys":
                 listProcess.append(lt)
     linesOfTotalPss = lines[idxTotalPss+1:idxAll-1]
     for l in linesOfTotalPss:
         l = l.decode('utf-8')
         ltmp = l.split("K:")
-        listPss.append(ltmp[0].strip())
+        listPss.append(int(ltmp[0].strip().replace(',','')))
 
     linesOfAll = lines[idxAll:]
     linesOfAll.pop()
     for l in linesOfAll:
         l = l.decode('utf-8')
-        litsTotal.append(l.split(":")[1].split("K")[0])
+        litsTotal.append(int(l.split(":")[1].split("K")[0].strip().replace(',','')))
 
     return tamp
 
