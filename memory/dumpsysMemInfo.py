@@ -53,7 +53,7 @@ def collectToCsv(processCsv,pssCsv, totalMemCsv):
         dfProcessCsv = pd.read_csv(processCsv)
         dfProcessCsv[timeTamp] = '0'
 
-        col = dfProcessCsv.loc[0].count() - 1
+        col = dfProcessCsv.shape[1]-1
         setpid = set(dfProcessCsv['pid'])
         for l in listProcess:
             if int(l[0]) not in setpid:
@@ -85,8 +85,7 @@ def collectToCsv(processCsv,pssCsv, totalMemCsv):
 def initAndStart(path):
     timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     processCsv = path+"/process-"+timeValue+".csv"
-    tableTitle = [['pid','name'],
-                    [0,0]]
+    tableTitle = [['pid','name']]
     os.system("touch " + processCsv)
 
     with open(processCsv, "w", newline='') as f:
@@ -98,8 +97,7 @@ def initAndStart(path):
     tableTitle = [['TimeTamp','.so mmap','Native','.dex mmap', 'EGL mtrack', 'GL mtrack',
                     'Unknown', '.oat mmap', '.apk mmap', 'Dalvik','.art mmap',
                     'Gfx dev', 'Other mmap', 'Dalvik Other', '.ttf mmap', 'Stack',
-                    'Other dev','.jar mmap', 'Ashmem', 'Cursor', 'Other mtrack'],
-                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]]
+                    'Other dev','.jar mmap', 'Ashmem', 'Cursor', 'Other mtrack']]
     os.system("touch " + totalPssCsv)
 
     with open(totalPssCsv, "w", newline='') as f:
@@ -109,8 +107,7 @@ def initAndStart(path):
 
 
     totalMemCsv = path+"/total-mem-"+timeValue+".csv"
-    tableTitle = [['TimeTamp','Total RAM','Free RAM', 'Used RAM', 'Lost RAM', 'ZRAM'],
-                    [0,0,0,0,0,0]]
+    tableTitle = [['TimeTamp','Total RAM','Free RAM', 'Used RAM', 'Lost RAM', 'ZRAM']]
     os.system("touch " + totalMemCsv)
     with open(totalMemCsv, "w", newline='') as f:
         writer = csv.writer(f)
