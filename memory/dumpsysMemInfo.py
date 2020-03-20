@@ -7,11 +7,14 @@ import subprocess
 import chardet
 import getopt
 import sys
+from datetime import datetime
 
 
 
 def getMemoryInfo(listProcess, listPss, litsTotal):
-    tamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    #tamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    tampPhone = subprocess.Popen('adb shell "date \'+%Y-%m-%d %H:%M:%S\'"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+    tamp = tampPhone.stdout.readlines()[0].decode('utf-8').strip('\n')
     res = subprocess.Popen('adb shell "dumpsys meminfo"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
     lines = res.stdout.readlines()
 

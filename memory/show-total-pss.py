@@ -1,6 +1,7 @@
 import os
 import sys
 import csv
+from datetime import datetime
 import pandas as pd
 import getopt
 import matplotlib.pyplot as plt
@@ -9,26 +10,32 @@ import matplotlib.dates as mdates
 
 def show_total_data(ifile, timeRefrush):
     plt.style.use("seaborn-poster")
-    df=pd.read_csv(ifile)
-    lx=df['TimeTamp'].tolist()
+    df = pd.read_csv(ifile)
+    lx = df['TimeTamp'].tolist()
+    lx = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in lx]
     colName = df.columns.values.tolist()[1:]
     ylist=[]
     for i in colName:
         ylist.append(df[i].tolist())
 
     rowCnt = df.shape[0]
-    plt.ion()
-    i = 0
+
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
+    plt.gcf().autofmt_xdate()
+    plt.legend(labels=colName,fontsize ='large')
+    # plt.stackplot(lx, ylist, labels = colName)
+    # plt.show()
+    # plt.ion()
+    i = 0
+    sub=10
     while i < rowCnt:
+        plt.clf()
         ylistSub=[]
         for j in ylist:
-            ylistSub.append(j[0:i])
-        print(lx[0:i])
-        print(ylistSub)
-        plt.stackplot(lx[0:i], ylistSub)
+            ylistSub.append(j[i:i+sub])
+        plt.stackplot(lx[i:i+sub], ylistSub, labels = colName)
         plt.pause(timeRefrush)
-        i = i + 1
+        i = i + sub
 
 
 

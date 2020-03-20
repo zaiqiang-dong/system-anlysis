@@ -15,7 +15,7 @@ def show_total_data(ifile, timeRefrush):
     plt.ion()
     while i < rowCnt:
         ldata = df.loc[i][2:].tolist()
-        plt.pie(ldata,labels=lname)
+        plt.pie(ldata,labels=lname,colors=['g','m','y','c'])
         plt.pause(timeRefrush)
         i = i + 1
 
