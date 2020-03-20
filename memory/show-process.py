@@ -9,7 +9,7 @@ import matplotlib.dates as mdates
 
 
 def show_pid_data(ifile, timeRefrush, pid):
-    plt.style.use("seaborn-poster")
+    plt.style.use("fivethirtyeight")
     df = pd.read_csv(ifile)
     lx = df.columns.values.tolist()[2:]
     lx = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in lx]
@@ -33,7 +33,7 @@ def show_pid_data(ifile, timeRefrush, pid):
         i = i + sub
 
 def show_total_data(ifile, timeRefrush):
-    plt.style.use("seaborn-poster")
+    plt.style.use("fivethirtyeight")
     df = pd.read_csv(ifile)
     lx = df.columns.values.tolist()[2:]
     lx = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in lx]

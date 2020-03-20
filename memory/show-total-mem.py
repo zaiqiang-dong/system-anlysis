@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 def show_total_data(ifile, timeRefrush):
-    plt.style.use("seaborn-poster")
+    plt.style.use("fivethirtyeight")
     df=pd.read_csv(ifile)
     rowCnt = df.shape[0]
     lname=df.columns.values[2:].tolist()
