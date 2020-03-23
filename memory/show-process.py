@@ -10,6 +10,8 @@ import matplotlib.dates as mdates
 
 def show_pid_data(ifile, timeRefrush, pid):
     plt.style.use("fivethirtyeight")
+    # mng = plt.get_current_fig_manager()
+    # mng.full_screen_toggle()
     df = pd.read_csv(ifile)
     lx = df.columns.values.tolist()[2:]
     lx = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in lx]
@@ -25,15 +27,21 @@ def show_pid_data(ifile, timeRefrush, pid):
     plt.ion()
     rowCnt = len(lx)
     i = 2
-    sub = 10
+    sub = 3
     while i < rowCnt:
         plt.clf()
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
+        plt.gcf().autofmt_xdate()
+        plt.ylabel("Memery Used (KB)")
+        plt.title("Memory Usd (Pid = "+str(pid)+")")
         plt.stackplot(lx[i:i+sub], ylshow[i:i+sub], colors=['#20ab47'])
         plt.pause(timeRefrush)
         i = i + sub
 
 def show_total_data(ifile, timeRefrush):
     plt.style.use("fivethirtyeight")
+    # mng = plt.get_current_fig_manager()
+    # mng.full_screen_toggle()
     df = pd.read_csv(ifile)
     lx = df.columns.values.tolist()[2:]
     lx = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in lx]
@@ -48,9 +56,13 @@ def show_total_data(ifile, timeRefrush):
     plt.ion()
     rowCnt = len(lx)
     i = 2
-    sub = 10
+    sub = 3
     while i < rowCnt:
         plt.clf()
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
+        plt.gcf().autofmt_xdate()
+        plt.ylabel("Memery Used (KB)")
+        plt.title("Memory Total All Process")
         ylistSub=[]
         for j in ylist:
             ylistSub.append(j[i:i+sub])
