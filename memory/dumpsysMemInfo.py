@@ -7,9 +7,11 @@ import subprocess
 import chardet
 import getopt
 import sys
+import _thread
 from datetime import datetime
 
 exit_dump=False
+save_result=False
 
 def getMemoryInfo(listProcess, listPss, litsTotal):
     #tamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -65,41 +67,46 @@ def getMemoryInfo(listProcess, listPss, litsTotal):
 
 def collectToCsv(processCsv, pssCsv, totalMemCsv):
     global exit_dump
+    global save_result
+    save_result = False
+    dfProcessCsv = pd.read_csv(processCsv)
+    dfPssCsv = pd.read_csv(pssCsv)
+    dfTotalCsv = pd.read_csv(totalMemCsv)
     while exit_dump == False:
         listProcess = []
         listPss = []
         listTatal = []
         timeTamp = getMemoryInfo(listProcess, listPss, listTatal)
 
-        dfProcessCsv = pd.read_csv(processCsv)
         dfProcessCsv[timeTamp] = '0'
 
         col = dfProcessCsv.shape[1] - 1
-        setpid = set(dfProcessCsv['pid'])
+        #setpid = set(dfProcessCsv['pid'])
+        setname = set(dfProcessCsv['name'])
         for l in listProcess:
-            if int(l[0]) not in setpid:
-                row = dfProcessCsv["pid"].count()
+            if (l[1] not in setname):
+                row = dfProcessCsv.shape[0]
                 dfProcessCsv.loc[row] = 0
                 dfProcessCsv.iloc[row, 0] = l[0]
                 dfProcessCsv.iloc[row, 1] = l[1]
                 dfProcessCsv.iloc[row, col] = l[2]
             else:
-                lpid = dfProcessCsv['pid'].tolist()
-                idx = lpid.index(int(l[0]))
+                lname = dfProcessCsv['name'].tolist()
+                idx = lname.index(l[1])
                 dfProcessCsv.iloc[idx, col] = l[2]
-        dfProcessCsv.to_csv(processCsv, index=False)
 
-        dfPssCsv = pd.read_csv(pssCsv)
         listPss.insert(0, timeTamp)
-        dfPssCsv.loc[dfProcessCsv.shape[0]] = listPss
-        dfPssCsv.to_csv(pssCsv, index=False)
+        print(listPss)
+        dfPssCsv.loc[dfPssCsv.shape[0]] = listPss
 
-        dfTotalCsv = pd.read_csv(totalMemCsv)
         listTatal.insert(0, timeTamp)
         dfTotalCsv.loc[dfTotalCsv.shape[0]] = listTatal
-        dfTotalCsv.to_csv(totalMemCsv, index=False)
 
         time.sleep(5)
+    dfProcessCsv.to_csv(processCsv, index=False)
+    dfPssCsv.to_csv(pssCsv, index=False)
+    dfTotalCsv.to_csv(totalMemCsv, index=False)
+    save_result = True
     print("*****************exit_dump*******************")
 
 
@@ -137,12 +144,15 @@ def initAndStart(path):
         writer = csv.writer(f)
         for row in tableTitle:
             writer.writerow(row)
-
-    collectToCsv(processCsv, totalPssCsv, totalMemCsv)
+    _thread.start_new_thread(collectToCsv, (processCsv, totalPssCsv, totalMemCsv))
+    #collectToCsv(processCsv, totalPssCsv, totalMemCsv)
 
 
 def stop():
     global exit_dump
-    exit_dump = False
+    exit_dump = True
+    global save_result
+    while not save_result:
+        time.sleep(0.2)
 
 

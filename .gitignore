@@ -4,3 +4,4 @@ tags
 out/
 /*/__pycache__/
 /*/*.pyc
+/*/*.csv

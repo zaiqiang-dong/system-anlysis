@@ -42,7 +42,7 @@ if __name__ == "__main__":
     subprocess.call("rm " + outdir + "/*", shell=True)
     if configDev.config():
         print("*" * 100)
-        _thread.start_new_thread(dumpsysMemInfo.initAndStart, (outdir,))
+        dumpsysMemInfo.initAndStart(outdir)
         fd, p = logcatCollect.startLogcatCollect(outdir)
         monkeyTest.doMonkeyTest(times, actionCount, outdir)
         dumpsysMemInfo.stop()
