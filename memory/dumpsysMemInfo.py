@@ -96,7 +96,6 @@ def collectToCsv(processCsv, pssCsv, totalMemCsv):
                 dfProcessCsv.iloc[idx, col] = l[2]
 
         listPss.insert(0, timeTamp)
-        print(listPss)
         dfPssCsv.loc[dfPssCsv.shape[0]] = listPss
 
         listTatal.insert(0, timeTamp)
