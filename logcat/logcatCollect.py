@@ -6,21 +6,11 @@ import getopt
 import signal
 import re
 
-logcatProcess = -1
-times = 2
-outdir = ''
-outfileFd = -1
-
 
 def startLogcatCollect(outdir):
-    global outfileFd
-    global logcatProcess
-    outfile = outdir + "logcat-log.txt"
+    outfile = outdir + "/logcat-log.txt"
     if os.path.isfile(outfile):
         os.remove(outfile)
-        print(outfile + " file is exit, rm it.")
-    else:
-        print(outfile + " file is not exit.")
 
     tamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     outfileFd = open(outfile, 'w')
@@ -42,23 +32,12 @@ def startLogcatCollect(outdir):
         shell=True,
         close_fds=True)
     logcatProcess = p
+    return outfileFd, logcatProcess
 
 
-def stopLogcatCollect():
-    global outfileFd
-    global logcatProcess
+def stopLogcatCollect(outfileFd, logcatProcess):
     logcatProcess.terminate()
     logcatProcess.wait()
-    outfileFd.write("-" * 100)
-    outfileFd.write("\n" * 3)
-    tamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    outfileFd.write("*" * 100)
-    outfileFd.write("\n")
-    outfileFd.write("End Test at " + tamp)
-    outfileFd.write("\n")
-    outfileFd.write("*" * 100)
-    outfileFd.write("\n")
-    outfileFd.close()
     ######################################
     k = subprocess.Popen(
         'ps -A -f | grep "adb"',
@@ -74,25 +53,13 @@ def stopLogcatCollect():
     k.terminate()
     k.wait()
     ######################################
-
-
-def printHelp():
-    print("python3 " + str(sys.argv[0]) + " -t x")
-    print("    -h --hlep : show this info.")
-
-
-opts, args = getopt.getopt(sys.argv[1:], '-h:-t:-o:-v',
-                           ['help', 'times', 'outdir', 'version'])
-for opt_name, opt_value in opts:
-    if opt_name in ('-h', '--hlep'):
-        printHelp()
-        exit()
-    if opt_name in ('-t', '--time'):
-        times = int(opt_value)
-    if opt_name in ('-o', '--outdir'):
-        outdir = opt_value
-
-if __name__ == "__main__":
-    startLogcatCollect(outdir)
-    time.sleep(times)
-    stopLogcatCollect()
+    outfileFd.write("-" * 100)
+    outfileFd.write("\n" * 3)
+    tamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    outfileFd.write("*" * 100)
+    outfileFd.write("\n")
+    outfileFd.write("End Test at " + tamp)
+    outfileFd.write("\n")
+    outfileFd.write("*" * 100)
+    outfileFd.write("\n")
+    outfileFd.close()

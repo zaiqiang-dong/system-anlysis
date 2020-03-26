@@ -1,3 +1,5 @@
 /memory/*.csv
 /memory/*.csv*
 tags
+out/
+/*/__pycache__/

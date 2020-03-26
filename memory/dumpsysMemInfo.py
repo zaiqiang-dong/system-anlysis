@@ -9,6 +9,7 @@ import getopt
 import sys
 from datetime import datetime
 
+exit_dump=False
 
 def getMemoryInfo(listProcess, listPss, litsTotal):
     #tamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -63,7 +64,8 @@ def getMemoryInfo(listProcess, listPss, litsTotal):
 
 
 def collectToCsv(processCsv, pssCsv, totalMemCsv):
-    while True:
+    global exit_dump
+    while exit_dump == False:
         listProcess = []
         listPss = []
         listTatal = []
@@ -97,8 +99,8 @@ def collectToCsv(processCsv, pssCsv, totalMemCsv):
         dfTotalCsv.loc[dfTotalCsv.shape[0]] = listTatal
         dfTotalCsv.to_csv(totalMemCsv, index=False)
 
-        time.sleep(1)
-        print("load data ...")
+        time.sleep(5)
+    print("*****************exit_dump*******************")
 
 
 def initAndStart(path):
@@ -139,25 +141,8 @@ def initAndStart(path):
     collectToCsv(processCsv, totalPssCsv, totalMemCsv)
 
 
-def printHelp():
-    print("python3 " + str(sys.argv[0]) + " -o path")
-    print("    -o --outpath : out path for memory info data")
+def stop():
+    global exit_dump
+    exit_dump = False
 
 
-outpath = ''
-opts, args = getopt.getopt(sys.argv[1:], '-h-o:-v',
-                           ['help', 'outpath=', 'version'])
-for opt_name, opt_value in opts:
-    if opt_name in ('-h', '--hlep'):
-        printHelp()
-        exit()
-    if opt_name in ('-o', '--outpath'):
-        outpath = opt_value
-
-if outpath != '':
-    print("Collect to " + outpath)
-    initAndStart(outpath)
-else:
-    print("Please attach correct args.")
-    printHelp()
-    exit()
