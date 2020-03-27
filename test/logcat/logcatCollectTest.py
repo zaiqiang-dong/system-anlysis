@@ -1,7 +1,7 @@
 import sys
 import time
 import getopt
-sys.path.append("../")
+sys.path.append("../../")
 from logcat import logcatCollect
 
 

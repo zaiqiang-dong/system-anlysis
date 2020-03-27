@@ -1,6 +1,6 @@
 import getopt
 import sys
-sys.path.append("../monkey")
+sys.path.append("../../monkey")
 
 import monkeyTest
 
