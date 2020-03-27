@@ -66,8 +66,8 @@ if __name__ == "__main__":
         print("Config dev error.")
         print("*" * 100)
 
-    showProcess.report_all_procee_data(outdirIntermediate+"dumpmem-process.csv", outdirReport)
-    showTotalPss.report_total_data(outdirIntermediate+"dumpmem-pss.csv", outdirReport)
-    showTotalMem.report_total_data(outdirIntermediate+"dumpmem-total.csv", outdirReport)
+    showProcess.report_all_procee_data(outdirIntermediate+"/dumpmem-process.csv", outdirReport)
+    showTotalPss.report_total_data(outdirIntermediate+"/dumpmem-pss.csv", outdirReport)
+    showTotalMem.report_total_data(outdirIntermediate+"/dumpmem-total.csv", outdirReport)
 
-    processLogInfo.doprocess(outdirIntermediate+"logcat-log.txt", outdirReport)
+    processLogInfo.doprocess(outdirIntermediate+"/logcat-log.txt", outdirReport)
