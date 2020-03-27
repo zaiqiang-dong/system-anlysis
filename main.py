@@ -9,6 +9,13 @@ from monkey import monkeyTest
 from logcat import logcatCollect
 from configDev import configDev
 
+#import process moudle
+from memory import showProcess
+from memory import showTotalMem
+from memory import showTotalPss
+
+from logcat import processLogInfo
+
 
 def printAllHelp():
     print("    -h --hlep : show this info.")
@@ -42,13 +49,15 @@ if __name__ == "__main__":
         os.makedirs(outdir)
     timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     #subprocess.call("rm -rf " + outdir + "/*", shell=True)
-    outdir = outdir + "/intermediate-" + timeValue
-    subprocess.call("mkdir " + outdir, shell=True)
+    outdirIntermediate = outdir + "/intermediate-" + timeValue
+    outdirReport = outdir + "/report-" + timeValue
+    subprocess.call("mkdir " + outdirIntermediate, shell=True)
+    subprocess.call("mkdir " + outdirReport, shell=True)
     if configDev.config():
         print("*" * 100)
-        dumpsysMemInfo.initAndStart(outdir)
-        fd, p = logcatCollect.startLogcatCollect(outdir)
-        monkeyTest.doMonkeyTest(times, actionCount, outdir)
+        dumpsysMemInfo.initAndStart(outdirIntermediate)
+        fd, p = logcatCollect.startLogcatCollect(outdirIntermediate)
+        monkeyTest.doMonkeyTest(times, actionCount, outdirIntermediate)
         dumpsysMemInfo.stop()
         logcatCollect.stopLogcatCollect(fd, p)
         print("*" * 100)
@@ -56,3 +65,9 @@ if __name__ == "__main__":
         print("*" * 100)
         print("Config dev error.")
         print("*" * 100)
+
+    showProcess.report_all_procee_data(outdirIntermediate+"dumpmem-process.csv", outdirReport)
+    showTotalPss.report_total_data(outdirIntermediate+"dumpmem-pss.csv", outdirReport)
+    showTotalMem.report_total_data(outdirIntermediate+"dumpmem-total.csv", outdirReport)
+
+    processLogInfo.doprocess(outdirIntermediate+"logcat-log.txt", outdirReport)

@@ -111,7 +111,7 @@ def collectToCsv(processCsv, pssCsv, totalMemCsv):
 
 def initAndStart(path):
     timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
-    processCsv = path + "/process-" + timeValue + ".csv"
+    processCsv = path + "/dumpmem-process.csv"
     tableTitle = [['pid', 'name']]
     os.system("touch " + processCsv)
 
@@ -120,7 +120,7 @@ def initAndStart(path):
         for row in tableTitle:
             writer.writerow(row)
 
-    totalPssCsv = path + "/total-pss-" + timeValue + ".csv"
+    totalPssCsv = path + "/dumpmem-pss.csv"
     tableTitle = [[
         'TimeTamp', '.so mmap', 'Native', '.dex mmap', 'EGL mtrack',
         'GL mtrack', 'Unknown', '.oat mmap', '.apk mmap', 'Dalvik', '.art mmap',
@@ -134,7 +134,7 @@ def initAndStart(path):
         for row in tableTitle:
             writer.writerow(row)
 
-    totalMemCsv = path + "/total-mem-" + timeValue + ".csv"
+    totalMemCsv = path + "/dumpmem-total.csv"
     tableTitle = [[
         'TimeTamp', 'Total RAM', 'Free RAM', 'Used RAM', 'Lost RAM', 'ZRAM'
     ]]
