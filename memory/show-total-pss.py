@@ -10,7 +10,7 @@ import matplotlib.dates as mdates
 from matplotlib.widgets import Button
 
 
-def show_total_data(ifile, timeRefrush, isDyanmic):
+def show_total_data(ifile, timeRefrush, isDyanmic, out=''):
     plt.style.use("fivethirtyeight")
     # mng = plt.get_current_fig_manager()
     # mng.full_screen_toggle()
@@ -50,6 +50,8 @@ def show_total_data(ifile, timeRefrush, isDyanmic):
         plt.title("Memory Total Pass")
         plt.stackplot(lx, ylist, labels=colName)
         plt.legend(loc=10, bbox_to_anchor=(1.0, 0.5))
+        if out != '':
+            plt.savefig(out)
         plt.show()
 
 
