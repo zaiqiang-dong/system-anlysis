@@ -1,6 +1,8 @@
 import os
 import sys
 import csv
+import subprocess
+import time
 from datetime import datetime
 import pandas as pd
 import getopt
@@ -75,34 +77,32 @@ def show_total_data(ifile, timeRefrush):
         plt.pause(timeRefrush)
         i = i + sub
 
+def report_all_procee_data(ifile, outdir=''):
+    plt.style.use("fivethirtyeight")
+    df = pd.read_csv(ifile)
+    lx = df.columns.values.tolist()[2:]
+    lx = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in lx]
+    ylist = df.values.tolist()
 
-def printHelp():
-    print("python3 " + str(sys.argv[0]) + " -i total-mem-xxx.csv")
-    print("    -i --ifile : input a total mem csv file.")
-    print("    -t --timeRefrush : interval of data refrush.")
-    print("    -p --pid : process num.")
+    outdir = outdir + "/process-memory-info"
+    if os.path.exists(outdir):
+        subprocess.call('rm -rf ' + outdir + '*',shell=True)
+    else:
+        os.makedirs(outdir)
+
+    for l in ylist:
+        plt.clf()
+        plt.figure(figsize=(19.2,6.4))
+        plt.gca().xaxis.set_major_formatter(
+            mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
+        plt.gcf().autofmt_xdate()
+        plt.ylabel("Memery Used (KB)")
+        plt.title("Memory Usd (PName = " + str(l[1]) + ")")
+        plt.stackplot(lx, l[2:])
+        if outdir != '':
+            plt.savefig(outdir +"/"+ str(l[1]) + ".png", dpi=100)
+        else:
+            plt.show()
+        plt.close()
 
 
-ifile = ''
-pid = 0
-reFrushTiem = 1.0
-opts, args = getopt.getopt(sys.argv[1:], '-h-i:-t:-p:-v',
-                           ['help', 'ifile', 'timerefrash', 'pid', 'version'])
-for opt_name, opt_value in opts:
-    if opt_name in ('-h', '--hlep'):
-        printHelp()
-        exit()
-    if opt_name in ('-i', '--ifile'):
-        ifile = opt_value
-    if opt_name in ('-p', '--pid'):
-        pid = int(opt_value)
-    if opt_name in ('-t', '--timerefrash'):
-        reFrushTiem = float(opt_value)
-
-if ifile != '' and pid != 0:
-    show_pid_data(ifile, reFrushTiem, pid)
-elif ifile != '' and pid == 0:
-    show_total_data(ifile, reFrushTiem)
-else:
-    printHelp()
-    exit()

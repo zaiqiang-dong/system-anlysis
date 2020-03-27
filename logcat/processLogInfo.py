@@ -5,10 +5,15 @@ import pandas as pd
 import csv
 
 
-def doprocess(outpath, logFile):
+def doprocess(logFile, outdir=''):
+    outdir = outdir + "/process-loginfo"
+    if os.path.exists(outdir):
+        subprocess.call('rm -rf ' + outdir + '*',shell=True)
+    else:
+        os.makedirs(outdir)
     regexes = [re.compile(p) for p in ['(.*)java.lang(.*)Exception(.*)', '(.*)java.lang(.*)Error(.*)', "Crash"]]
     timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
-    processLogCsv = outpath + "/process-loginfo-" + timeValue + ".csv"
+    processLogCsv = outdir + "/process-loginfo-" + timeValue + ".csv"
     tableTitle = [['id', 'bug', 'log-linenumbers','times']]
     os.system("touch " + processLogCsv)
 
