@@ -100,7 +100,7 @@ def report_all_procee_data(ifile, outdir=''):
         plt.title("Memory Usd (PName = " + str(l[1]) + ")")
         plt.stackplot(lx, l[2:])
         if outdir != '':
-            plt.savefig(outdir +"/"+ str(l[1]) + ".png", dpi=100)
+            plt.savefig(outdir +"/"+ str(l[1]).replace('.','_') + ".png", dpi=100)
         else:
             plt.show()
         plt.close()
