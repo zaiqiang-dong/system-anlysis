@@ -18,8 +18,9 @@ def doprocess(outpath, logFile):
             writer.writerow(row)
 
     dfProcessLogCsv = pd.read_csv(processLogCsv)
-    print("*"*100)
-    logFileFd = open(logFile, 'r')
+    print("*"*40+"start"+"*"*40)
+    print("      process...   ")
+    logFileFd = open(logFile, 'r', errors='ignore')
     line = logFileFd.readline()
     lineNumger = 1
     exceptionSet = set()
@@ -40,18 +41,18 @@ def doprocess(outpath, logFile):
                     strtmp = bug_info
                     bug_info = ''
                     ps = 0
-                    print("\n")
-                    print(strtmp)
-                    print(splitPoint)
-                    print(len(strtmp))
+                    # print("\n")
+                    # print(strtmp)
+                    # print(splitPoint)
+                    # print(len(strtmp))
                     for s in splitPoint:
                         s = s - ps
                         ps += s
                         bug_info += strtmp[0:s] + "\n"
                         strtmp = strtmp[s:]
                     bug_info += strtmp
-                    print(bug_info)
-                    print("\n")
+                    # print(bug_info)
+                    # print("\n")
                 else:
                     bug_info = '\"' + bug_info + '\"'
 
@@ -84,3 +85,4 @@ def doprocess(outpath, logFile):
         line = logFileFd.readline()
         lineNumger += 1
     dfProcessLogCsv.to_csv(processLogCsv, index=False)
+    print("*"*40+" end "+"*"*40)
