@@ -1,4 +1,5 @@
 import _thread
+import time
 import subprocess
 import getopt
 import os
@@ -39,7 +40,10 @@ if __name__ == "__main__":
     if not os.path.exists(outdir):
         print(outdir + " is not exit and creat it.")
         os.makedirs(outdir)
-    subprocess.call("rm " + outdir + "/*", shell=True)
+    timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
+    #subprocess.call("rm -rf " + outdir + "/*", shell=True)
+    outdir = outdir + "/intermediate-" + timeValue
+    subprocess.call("mkdir " + outdir, shell=True)
     if configDev.config():
         print("*" * 100)
         dumpsysMemInfo.initAndStart(outdir)
