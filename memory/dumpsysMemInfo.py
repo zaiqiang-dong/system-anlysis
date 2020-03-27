@@ -106,7 +106,6 @@ def collectToCsv(processCsv, pssCsv, totalMemCsv):
     dfPssCsv.to_csv(pssCsv, index=False)
     dfTotalCsv.to_csv(totalMemCsv, index=False)
     save_result = True
-    print("*****************exit_dump*******************")
 
 
 def initAndStart(path):
