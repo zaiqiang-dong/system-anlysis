@@ -8,6 +8,7 @@ from memory import dumpsysMemInfo
 from monkey import monkeyTest
 from logcat import logcatCollect
 from configDev import configDev
+from report import reportByPDF
 
 #import process moudle
 from memory import showProcess
@@ -53,21 +54,45 @@ if __name__ == "__main__":
     outdirReport = outdir + "/report-" + timeValue
     subprocess.call("mkdir " + outdirIntermediate, shell=True)
     subprocess.call("mkdir " + outdirReport, shell=True)
-    if configDev.config():
+    print("\n"*2)
+    print("*" * 100)
+    print("Config Device")
+    devVersion = configDev.config()
+    print("Device version : " + devVersion)
+    print("*" * 100)
+    print("\n"*2)
+    if devVersion != '':
         print("*" * 100)
+        print("Do monkey test...")
         dumpsysMemInfo.initAndStart(outdirIntermediate)
         fd, p = logcatCollect.startLogcatCollect(outdirIntermediate)
         monkeyTest.doMonkeyTest(times, actionCount, outdirIntermediate)
         dumpsysMemInfo.stop()
         logcatCollect.stopLogcatCollect(fd, p)
         print("*" * 100)
+
+        print("\n"*2)
+        print("*" * 100)
+        print("Process memory info")
+        showProcess.report_all_procee_data(outdirIntermediate+"/dumpmem-process.csv", outdirReport)
+        showTotalPss.report_total_data(outdirIntermediate+"/dumpmem-pss.csv", outdirReport)
+        showTotalMem.report_total_data(outdirIntermediate+"/dumpmem-total.csv", outdirReport)
+        print("*" * 100)
+
+        print("\n"*2)
+        print("*" * 100)
+        print("Process logcat info")
+        processLogInfo.doprocess(outdirIntermediate+"/logcat-log.txt", outdirReport)
+        print("*" * 100)
+
+        print("\n"*2)
+        print("*" * 100)
+        print("Create Report.pdf" + outdirReport)
+        reportByPDF.createReport(outdirReport, devVersion, timeValue)
+        print("*" * 100)
+        print("\n"*2)
     else:
         print("*" * 100)
-        print("Config dev error.")
+        print("Config dev error and end test.")
         print("*" * 100)
 
-    showProcess.report_all_procee_data(outdirIntermediate+"/dumpmem-process.csv", outdirReport)
-    showTotalPss.report_total_data(outdirIntermediate+"/dumpmem-pss.csv", outdirReport)
-    showTotalMem.report_total_data(outdirIntermediate+"/dumpmem-total.csv", outdirReport)
-
-    processLogInfo.doprocess(outdirIntermediate+"/logcat-log.txt", outdirReport)
