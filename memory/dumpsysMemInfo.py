@@ -79,33 +79,36 @@ def collectToCsv(processCsv, pssCsv, totalMemCsv):
         listProcess = []
         listPss = []
         listTatal = []
-        timeTamp = getMemoryInfo(listProcess, listPss, listTatal)
-        if timeTamp == None:
-            continue
-        dfProcessCsv[timeTamp] = '0'
+        try:
+            timeTamp = getMemoryInfo(listProcess, listPss, listTatal)
+            if timeTamp == None:
+                continue
+            dfProcessCsv[timeTamp] = '0'
 
-        col = dfProcessCsv.shape[1] - 1
-        #setpid = set(dfProcessCsv['pid'])
-        setname = set(dfProcessCsv['name'])
-        for l in listProcess:
-            if (l[1] not in setname):
-                row = dfProcessCsv.shape[0]
-                dfProcessCsv.loc[row] = 0
-                dfProcessCsv.iloc[row, 0] = l[0]
-                dfProcessCsv.iloc[row, 1] = l[1]
-                dfProcessCsv.iloc[row, col] = l[2]
-            else:
-                lname = dfProcessCsv['name'].tolist()
-                idx = lname.index(l[1])
-                dfProcessCsv.iloc[idx, col] = l[2]
+            col = dfProcessCsv.shape[1] - 1
+            #setpid = set(dfProcessCsv['pid'])
+            setname = set(dfProcessCsv['name'])
+            for l in listProcess:
+                if (l[1] not in setname):
+                    row = dfProcessCsv.shape[0]
+                    dfProcessCsv.loc[row] = 0
+                    dfProcessCsv.iloc[row, 0] = l[0]
+                    dfProcessCsv.iloc[row, 1] = l[1]
+                    dfProcessCsv.iloc[row, col] = l[2]
+                else:
+                    lname = dfProcessCsv['name'].tolist()
+                    idx = lname.index(l[1])
+                    dfProcessCsv.iloc[idx, col] = l[2]
 
-        listPss.insert(0, timeTamp)
-        dfPssCsv.loc[dfPssCsv.shape[0]] = listPss
+            listPss.insert(0, timeTamp)
+            dfPssCsv.loc[dfPssCsv.shape[0]] = listPss
 
-        listTatal.insert(0, timeTamp)
-        dfTotalCsv.loc[dfTotalCsv.shape[0]] = listTatal
+            listTatal.insert(0, timeTamp)
+            dfTotalCsv.loc[dfTotalCsv.shape[0]] = listTatal
+        except Exception as e:
+            print(" Get a error when dump mem info")
 
-        time.sleep(5)
+        time.sleep(1)
     dfProcessCsv.to_csv(processCsv, index=False)
     dfPssCsv.to_csv(pssCsv, index=False)
     dfTotalCsv.to_csv(totalMemCsv, index=False)
