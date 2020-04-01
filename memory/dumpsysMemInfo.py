@@ -32,10 +32,13 @@ def getMemoryInfo(listProcess, listPss, litsTotal):
 
     lenOfLines = len(lines)
     splitStr = b'\n'
-    idxPssProcess = lines.index(splitStr) + 1
-    idxPssOOM = lines.index(splitStr, idxPssProcess, lenOfLines) + 1
-    idxTotalPss = lines.index(splitStr, idxPssOOM, lenOfLines) + 1
-    idxAll = lines.index(splitStr, idxTotalPss, lenOfLines) + 1
+    try:
+        idxPssProcess = lines.index(splitStr) + 1
+        idxPssOOM = lines.index(splitStr, idxPssProcess, lenOfLines) + 1
+        idxTotalPss = lines.index(splitStr, idxPssOOM, lenOfLines) + 1
+        idxAll = lines.index(splitStr, idxTotalPss, lenOfLines) + 1
+    except Exception as e:
+        return None
 
     linesOfPssProcess = lines[idxPssProcess + 1:idxPssOOM - 1]
     for l in linesOfPssProcess:
@@ -77,7 +80,8 @@ def collectToCsv(processCsv, pssCsv, totalMemCsv):
         listPss = []
         listTatal = []
         timeTamp = getMemoryInfo(listProcess, listPss, listTatal)
-
+        if timeTamp == None:
+            continue
         dfProcessCsv[timeTamp] = '0'
 
         col = dfProcessCsv.shape[1] - 1
