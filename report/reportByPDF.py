@@ -55,18 +55,20 @@ def processRy(c, ry):
 def createIndext(c, p):
     lv = -1
     sty = p.style.name
+    closev = 0
     if sty == "Heading1":
         lv = 0
     elif sty == "Heading2":
         lv = 1
+        closev = 1
     elif sty == "Heading3":
         lv = 2
-        closeValue = 1
+        closev = 1
     if lv != -1:
         key = str(hash(p)) + str(random.random())
         tex = p.getPlainText()
         c.bookmarkPage(key)
-        c.addOutlineEntry(tex, key, level=lv, closed=0)
+        c.addOutlineEntry(tex, key, level=lv, closed=closev)
 
 def reportDrawHead(c):
     #head
