@@ -23,8 +23,6 @@ def doprocess(logFile, outdir=''):
             writer.writerow(row)
 
     dfProcessLogCsv = pd.read_csv(processLogCsv)
-    print("*"*40+"start"+"*"*40)
-    print("      process...   ")
     logFileFd = open(logFile, 'r', errors='ignore')
     line = logFileFd.readline()
     lineNumger = 1
@@ -90,4 +88,3 @@ def doprocess(logFile, outdir=''):
         line = logFileFd.readline()
         lineNumger += 1
     dfProcessLogCsv.to_csv(processLogCsv, index=False)
-    print("*"*40+" end "+"*"*40)
