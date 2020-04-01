@@ -18,6 +18,22 @@ from memory import showTotalPss
 from logcat import processLogInfo
 
 
+exit_print = False
+def printState(infoLog):
+    global exit_print
+    exit_print = False
+    c = 0
+    while not exit_print:
+        print('\r', infoLog + " Used " + str(c) + "s", end="", flush = True)
+        time.sleep(1)
+        c += 1
+    print('\r', infoLog + " end, Used " + str(c) + "s", end="\n", flush = True)
+
+def printStateStop():
+    global exit_print
+    exit_print = True
+    time.sleep(2)
+
 def printAllHelp():
     print("    -h --hlep : show this info.")
     print("    -t --times : times for monkey test. default is 10")
@@ -45,6 +61,7 @@ for opt_name, opt_value in opts:
         outdir = opt_value
 
 if __name__ == "__main__":
+
     if not os.path.exists(outdir):
         print(outdir + " is not exit and creat it.")
         os.makedirs(outdir)
@@ -63,7 +80,7 @@ if __name__ == "__main__":
     print("\n"*2)
     if devVersion != '':
         print("*" * 100)
-        print("Do monkey test...")
+        print("Do monkey test:")
         dumpsysMemInfo.initAndStart(outdirIntermediate)
         fd, p = logcatCollect.startLogcatCollect(outdirIntermediate)
         monkeyTest.doMonkeyTest(times, actionCount, outdirIntermediate)
@@ -73,22 +90,29 @@ if __name__ == "__main__":
 
         print("\n"*2)
         print("*" * 100)
-        print("Process memory info")
+        #print("Process memory info")
+        _thread.start_new_thread(printState,("Process memory info",))
         showProcess.report_all_procee_data(outdirIntermediate+"/dumpmem-process.csv", outdirReport)
         showTotalPss.report_total_data(outdirIntermediate+"/dumpmem-pss.csv", outdirReport)
         showTotalMem.report_total_data(outdirIntermediate+"/dumpmem-total.csv", outdirReport)
+        printStateStop()
         print("*" * 100)
 
         print("\n"*2)
         print("*" * 100)
-        print("Process logcat info")
+        #print("Process logcat info")
+        _thread.start_new_thread(printState,("Process logcat info",))
         processLogInfo.doprocess(outdirIntermediate+"/logcat-log.txt", outdirReport)
+        printStateStop()
         print("*" * 100)
 
         print("\n"*2)
         print("*" * 100)
-        print("Create Report.pdf" + outdirReport)
+        #print("Create Report.pdf" + outdirReport)
+        _thread.start_new_thread(printState,("Create Report.pdf",))
         reportByPDF.createReport(outdirReport, devVersion, timeValue)
+        printStateStop()
+        print("Report.pdf : " + outdirReport+"/Report.pdf")
         print("*" * 100)
         print("\n"*2)
     else:

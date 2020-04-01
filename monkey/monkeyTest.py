@@ -25,8 +25,8 @@ def timeOutKill():
             k = int(ret.group(3))
             ret = re.search(r'/bin/sh -c adb shell monkey -v-v-v', stmp, re.I)
             if ret == None:
-                print("Force stop monkey ," + " kill kp = " + str(kp) +
-                      " and k = " + str(k))
+                # print("Force stop monkey ," + " kill kp = " + str(kp) +
+                #       " and k = " + str(k))
                 os.kill(k, signal.SIGKILL)
                 os.kill(kp, signal.SIGKILL)
 
@@ -47,9 +47,9 @@ def doMonkeyTest(times, actionCount, outdir):
     outfileFd.write("\n" * 3)
 
     count = 1
+    print("Start Test at " + tamp)
     while count <= times:
-        print("Do " + str(count) + "TH at:" +
-              time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        print('\r',"Do " + str(count) + "th test",end="", flush=True)
         outfileFd.write("-" * 100)
         outfileFd.write("\n")
         outfileFd.write("Do " + str(count) + "TH at:" +
@@ -79,3 +79,6 @@ def doMonkeyTest(times, actionCount, outdir):
     outfileFd.write("\n")
     outfileFd.write("*" * 100)
     outfileFd.write("\n")
+    print('\r',"Complete " + str(count - 1) + "times test.",end="", flush=True)
+    print("")
+    print("End   Test at " + tamp)
