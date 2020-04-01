@@ -194,7 +194,7 @@ def reportDrawTable(c, ifile, chapter, ry, colw=None):
         ]
 
     styleN.fontSize = 36
-    styleN.leading = 48
+    styleN.leading = 64
     data1 = [[Paragraph(str(cell), styleN) for cell in row] for row in data[0:1]]
     styleN.fontSize = 24
     styleN.leading = 40
@@ -296,6 +296,7 @@ def reportDrawMemory(c,img_path, chapter, imgW, imgH, y):
     return ry
 
 def createReport(outdir, testVersion, testTime):
+    testVersion = testVersion.upper()
     c = canvas.Canvas(outdir + "/Report.pdf", pagesize = portrait(A0))
     global headStr
     headStr = testVersion + "-REPORT"
