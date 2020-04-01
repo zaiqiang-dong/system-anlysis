@@ -31,33 +31,34 @@ def doprocess(logFile, outdir=''):
         for p in regexes:
             if p.search(line):
                 bug_info = line[line.find(': ') + 1:].strip('\n').strip(',')
-                if len(bug_info) > 100:
-                    splitPoint = []
-                    i = 100
-                    lenOfBug = len(bug_info)
-                    while i < lenOfBug:
-                        if bug_info[i] == ' ' or bug_info[i] == '.' or bug_info[i] == ',' or bug_info[i] == '_':
-                            splitPoint.append(i)
-                            i += 100
-                        else:
-                            i += 1
-                    strtmp = bug_info
-                    bug_info = ''
-                    ps = 0
-                    # print("\n")
-                    # print(strtmp)
-                    # print(splitPoint)
-                    # print(len(strtmp))
-                    for s in splitPoint:
-                        s = s - ps
-                        ps += s
-                        bug_info += strtmp[0:s] + "\n"
-                        strtmp = strtmp[s:]
-                    bug_info += strtmp
-                    # print(bug_info)
-                    # print("\n")
-                else:
-                    bug_info = '\"' + bug_info + '\"'
+                # if len(bug_info) > 100:
+                #     splitPoint = []
+                #     i = 100
+                #     lenOfBug = len(bug_info)
+                #     while i < lenOfBug:
+                #         if bug_info[i] == ' ' or bug_info[i] == '.' or bug_info[i] == ',' or bug_info[i] == '_':
+                #             splitPoint.append(i)
+                #             i += 100
+                #         else:
+                #             i += 1
+                #     strtmp = bug_info
+                #     bug_info = ''
+                #     ps = 0
+                #     # print("\n")
+                #     # print(strtmp)
+                #     # print(splitPoint)
+                #     # print(len(strtmp))
+                #     for s in splitPoint:
+                #         s = s - ps
+                #         ps += s
+                #         bug_info += strtmp[0:s] + "\n"
+                #         strtmp = strtmp[s:]
+                #     bug_info += strtmp
+                #     # print(bug_info)
+                #     # print("\n")
+                # else:
+                #     bug_info = '\"' + bug_info + '\"'
+                bug_info = '\"' + bug_info + '\"'
 
                 cBugs = set(dfProcessLogCsv['bug'])
                 if bug_info not in cBugs:
