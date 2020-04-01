@@ -3,44 +3,45 @@ import sys
 import time
 import subprocess
 
-
-def config():
-    print("*" * 100)
-    print("Config dev ...")
-    print(" ")
-    print("adb root.")
-    subprocess.Popen(
+def configToRoot():
+    croot = subprocess.call(
         'adb root',
         shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
         close_fds=True)
-    print("sleep 2s for adb return.")
     time.sleep(2)
-    subprocess.Popen(
+    if croot != 0:
+        return False
+    else:
+        return True
+def configMemdump():
+    r = subprocess.call(
         'adb shell "echo 1 > /sys/module/msm_poweroff/parameters/download_mode"',
         shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
         close_fds=True)
-
-    print("open crash config.")
-    res = subprocess.Popen(
+    if r != 0:
+        return False
+    ret = subprocess.check_output(
         'adb shell "cat /sys/module/msm_poweroff/parameters/download_mode"',
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        close_fds=True)
+        shell=True)
 
-    for l in res.stdout.readlines():
-        if int(l.decode("utf-8").strip()) == 1:
-            print(" ")
-            print("config success.")
-            print("*" * 100)
-            print("\n")
-            return True
-    print("\n")
-    print("config failed.")
-    print("*" * 100)
-    print("\n")
-    return False
+    if int(ret.decode("utf-8").strip()) != 1:
+        return False
+    return True
+
+def getVersion():
+    ret = subprocess.check_output(
+        'adb shell "getprop ro.build.fingerprint"',
+        shell=True,
+        close_fds=True)
+    sbuildinfo = ret.decode("utf-8").strip()
+    l = sbuildinfo.split('/')
+    if len(l) <= 1:
+        return ''
+    return l[-2]
+
+
+def config():
+    ret=''
+    if configToRoot() and configMemdump():
+        ret = getVersion()
+    return ret
