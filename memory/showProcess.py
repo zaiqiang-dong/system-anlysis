@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 
+
 def show_pid_data(ifile, timeRefrush, pid):
     plt.style.use("fivethirtyeight")
     # mng = plt.get_current_fig_manager()
@@ -79,6 +80,7 @@ def show_total_data(ifile, timeRefrush):
 
 def report_all_procee_data(ifile, outdir=''):
     plt.style.use("fivethirtyeight")
+    pd.plotting.register_matplotlib_converters()
     df = pd.read_csv(ifile)
     lx = df.columns.values.tolist()[2:]
     lx = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in lx]
