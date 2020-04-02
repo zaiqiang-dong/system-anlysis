@@ -13,7 +13,15 @@ def configToRoot():
         return False
     else:
         return True
-def configMemdump():
+def configEnv():
+    r = subprocess.call('adb shell "rm /data/tombstones/* -rf"',shell=True)
+    if r != 0:
+        return False
+
+    r = subprocess.call('adb shell "rm /data/coredump/* -rf"',shell=True)
+    if r != 0:
+        return False
+
     r = subprocess.call(
         'adb shell "echo 1 > /sys/module/msm_poweroff/parameters/download_mode"',
         shell=True,
@@ -42,6 +50,6 @@ def getVersion():
 
 def config():
     ret=''
-    if configToRoot() and configMemdump():
+    if configToRoot() and configEnv():
         ret = getVersion()
     return ret

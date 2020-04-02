@@ -65,13 +65,14 @@ if __name__ == "__main__":
     if not os.path.exists(outdir):
         print(outdir + " is not exit and creat it.")
         os.makedirs(outdir)
-    timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
+    timeValue = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     print("*" * 100)
     print("Test start at : " + timeValue)
     print("*" * 100)
     #subprocess.call("rm -rf " + outdir + "/*", shell=True)
-    outdirIntermediate = outdir + "/intermediate-" + timeValue
-    outdirReport = outdir + "/report-" + timeValue
+    stimeValue = timeValue.replace(':','-').replace(' ','-')
+    outdirIntermediate = outdir + "/intermediate-" + stimeValue
+    outdirReport = outdir + "/report-" + stimeValue
     subprocess.call("mkdir " + outdirIntermediate, shell=True)
     subprocess.call("mkdir " + outdirReport, shell=True)
     print("\n"*2)
@@ -119,7 +120,7 @@ if __name__ == "__main__":
         print("*" * 100)
         print("\n"*2)
 
-        timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
+        timeValue = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         print("*" * 100)
         print("Test end   at : " + timeValue)
         print("*" * 100)
