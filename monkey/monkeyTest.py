@@ -47,7 +47,6 @@ def doMonkeyTest(times, actionCount, outdir):
     outfileFd.write("\n" * 3)
 
     count = 1
-    print("Start Test at " + tamp)
     while count <= times:
         print('\r',"Do " + str(count) + "th test",end="", flush=True)
         outfileFd.write("-" * 100)
@@ -81,4 +80,3 @@ def doMonkeyTest(times, actionCount, outdir):
     outfileFd.write("\n")
     print('\r',"Complete " + str(count - 1) + "times test.",end="", flush=True)
     print("")
-    print("End   Test at " + tamp)

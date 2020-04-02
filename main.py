@@ -66,6 +66,9 @@ if __name__ == "__main__":
         print(outdir + " is not exit and creat it.")
         os.makedirs(outdir)
     timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
+    print("*" * 100)
+    print("Test start at : " + timeValue)
+    print("*" * 100)
     #subprocess.call("rm -rf " + outdir + "/*", shell=True)
     outdirIntermediate = outdir + "/intermediate-" + timeValue
     outdirReport = outdir + "/report-" + timeValue
@@ -115,6 +118,11 @@ if __name__ == "__main__":
         print("Report.pdf : " + outdirReport+"/Report.pdf")
         print("*" * 100)
         print("\n"*2)
+
+        timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
+        print("*" * 100)
+        print("Test end   at : " + timeValue)
+        print("*" * 100)
     else:
         print("*" * 100)
         print("Config dev error and end test.")
