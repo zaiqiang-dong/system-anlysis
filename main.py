@@ -9,6 +9,7 @@ from monkey import monkeyTest
 from logcat import logcatCollect
 from configDev import configDev
 from report import reportByPDF
+from misc import miscinfo
 
 #import process moudle
 from memory import showProcess
@@ -107,6 +108,13 @@ if __name__ == "__main__":
         #print("Process logcat info")
         _thread.start_new_thread(printState,("Process logcat info",))
         processLogInfo.doprocess(outdirIntermediate+"/logcat-log.txt", outdirReport)
+        printStateStop()
+        print("*" * 100)
+
+        print("\n"*2)
+        print("*" * 100)
+        _thread.start_new_thread(printState,("Process misc info",))
+        miscinfo.processMisc(outdirReport)
         printStateStop()
         print("*" * 100)
 

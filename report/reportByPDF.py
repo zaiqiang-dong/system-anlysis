@@ -334,6 +334,20 @@ def createReport(outdir, testVersion, testTime):
     ry = reportDrawH2(c, "2.3 Precess Memory info", ry)
     reportDrawMemory(c,memoryResultProcessPath, "2.3",1920 ,640, ry)
     c.showPage()
+
+    miscCoredump = outdir + "/misc-info/coredump.csv"
+    reportDrawHead(c)
+    ry = reportDrawH1(c, "3 CoreDump info")
+    ry = reportDrawH2(c, "3.1 Coredump out", ry)
+    ry = reportDrawTable(c, miscCoredump ,"3.1.1 ", ry, colw=[1920])
+    c.showPage()
+
+    miscTombstones = outdir + "/misc-info/tombstones.csv"
+    reportDrawHead(c)
+    ry = h - paidingTop
+    ry = reportDrawH2(c, "3.2 Tombstones out", ry)
+    ry = reportDrawTable(c, miscTombstones ,"3.2.1 ", ry, colw=[1920])
+    c.showPage()
     c.save()
 
 
