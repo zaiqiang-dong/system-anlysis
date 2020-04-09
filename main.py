@@ -63,17 +63,18 @@ for opt_name, opt_value in opts:
 
 if __name__ == "__main__":
 
+    timeValue = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     if not os.path.exists(outdir):
         print(outdir + " is not exit and creat it.")
         os.makedirs(outdir)
-    timeValue = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     print("*" * 100)
     print("Test start at : " + timeValue)
     print("*" * 100)
-    #subprocess.call("rm -rf " + outdir + "/*", shell=True)
     stimeValue = timeValue.replace(':','-').replace(' ','-')
-    outdirIntermediate = outdir + "/intermediate-" + stimeValue
-    outdirReport = outdir + "/report-" + stimeValue
+    outdir = outdir + "/" +stimeValue
+    os.makedirs(outdir)
+    outdirIntermediate = outdir + "/info-collect"
+    outdirReport = outdir + "/info-report"
     subprocess.call("mkdir " + outdirIntermediate, shell=True)
     subprocess.call("mkdir " + outdirReport, shell=True)
     print("\n"*2)

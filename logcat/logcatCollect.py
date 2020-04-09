@@ -26,7 +26,7 @@ def startLogcatCollect(outdir):
     outfileFd = open(outfile, 'a')
 
     p = subprocess.Popen(
-        "adb logcat",
+        "adb logcat -b all",
         stdout=outfileFd,
         stderr=subprocess.PIPE,
         shell=True,

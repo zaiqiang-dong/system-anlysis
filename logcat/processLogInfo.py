@@ -11,7 +11,7 @@ def doprocess(logFile, outdir=''):
         subprocess.call('rm -rf ' + outdir + '*',shell=True)
     else:
         os.makedirs(outdir)
-    regexes = [re.compile(p) for p in ['(.*)java.lang(.*)Exception(.*)', '(.*)java.lang(.*)Error(.*)', "Crash"]]
+    regexes = [re.compile(p) for p in ['(.*)java.lang(.*)Exception(.*)', '(.*)java.lang(.*)Error(.*)', "Crash", '(.*)cut here(.*)', '(.*)KASAN(.*)']]
     timeValue = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     processLogCsv = outdir + "/process-loginfo-" + timeValue + ".csv"
     tableTitle = [['id', 'bug', 'log-linenumbers','times']]
@@ -30,6 +30,9 @@ def doprocess(logFile, outdir=''):
     while line != '':
         for p in regexes:
             if p.search(line):
+                if line.find('cut here') != -1:
+                    line = logFileFd.readline()
+                    lineNumger += 1
                 bug_info = line[line.find(': ') + 1:].strip('\n').strip(',')
                 # if len(bug_info) > 100:
                 #     splitPoint = []
@@ -84,7 +87,6 @@ def doprocess(logFile, outdir=''):
                         dfProcessLogCsv.iloc[idx,2] = nums
 
                 #print(str(lineNumger)+ '--------' + line.strip('\n')[0:200])
-                logFileFd.readline()
                 break
         line = logFileFd.readline()
         lineNumger += 1
